@@ -12,6 +12,8 @@ node_modules/
 /build
 frontend/build/
 backend/target/
+/backend/java/
+/backend/resources/
 
 # misc
 .DS_Store
