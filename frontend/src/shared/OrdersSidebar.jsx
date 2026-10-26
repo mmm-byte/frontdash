@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 
 const OrdersSidebar = ({ pendingOrders, preparingOrders, preparingTimestamps = {}, onAcceptOrder, onMarkReady }) => {
   const [etaInputs, setEtaInputs] = useState({});

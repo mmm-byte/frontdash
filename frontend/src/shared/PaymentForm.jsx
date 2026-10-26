@@ -55,7 +55,6 @@ const PaymentForm = ({
   const customerId = externalCustomerId !== undefined ? externalCustomerId : (customerData?.customerId || "");
   const setCustomerId = setExternalCustomerId || (() => {});
   const [useDeliveryAsBilling, setUseDeliveryAsBilling] = useState(false);
-  const [debounceTimer, setDebounceTimer] = useState(null);
 
   // Auto-fill from customerData if provided - fetch full payment info including decrypted CVV
   useEffect(() => {
@@ -121,15 +120,6 @@ const PaymentForm = ({
 
     loadCustomerPaymentInfo();
   }, [customerData]);
-
-  // Cleanup debounce timer on unmount
-  useEffect(() => {
-    return () => {
-      if (debounceTimer) {
-        clearTimeout(debounceTimer);
-      }
-    };
-  }, [debounceTimer]);
 
   // When toggling "use delivery as billing", copy address
   useEffect(() => {
@@ -202,6 +192,8 @@ const PaymentForm = ({
         break;
       case 'phone':
         formattedValue = value.replace(/\D/g, '').slice(0, 10);
+        break;
+      default:
         break;
     }
 

@@ -15,7 +15,6 @@ const HoursManager = ({ restaurantId, onSaved }) => {
 
   const [showModal, setShowModal] = useState(false);
   const [selectedDay, setSelectedDay] = useState(null);
-  const [newHours, setNewHours] = useState("");
   const [startTime, setStartTime] = useState("9:00 AM");
   const [endTime, setEndTime] = useState("9:00 PM");
   const [isClosed, setIsClosed] = useState(false);
@@ -115,16 +114,13 @@ const HoursManager = ({ restaurantId, onSaved }) => {
           setEndTime("9:00 PM");
         }
       }
-      setNewHours(dayHours);
     } else if (typeof dayHours === 'object' && dayHours !== null) {
       setStartTime(dayHours.open || "9:00 AM");
       setEndTime(dayHours.close || "9:00 PM");
-      setNewHours(`${dayHours.open} - ${dayHours.close}`);
       setIsClosed(false);
     } else {
       setStartTime("9:00 AM");
       setEndTime("9:00 PM");
-      setNewHours("9:00 AM - 9:00 PM");
       setIsClosed(false);
     }
 
@@ -134,7 +130,6 @@ const HoursManager = ({ restaurantId, onSaved }) => {
   const handleCloseModal = () => {
     setShowModal(false);
     setSelectedDay(null);
-    setNewHours("");
     setIsClosed(false);
   };
 

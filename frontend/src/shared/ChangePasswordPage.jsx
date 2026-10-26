@@ -102,11 +102,6 @@ const ChangePasswordPage = () => {
     }
   };
 
-  const handleCancel = () => {
-    // Don't allow cancel - they must change password
-    setError('You must change your password before continuing');
-  };
-
   return (
     <div className="auth-container">
       <div className="auth-card">

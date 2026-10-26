@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Button, Row, Col, Badge } from 'react-bootstrap';
-import { Truck, Phone, MapPin, Calendar, User, Shield, CheckCircle, Clock } from 'lucide-react';
+import { Truck, Phone, User, Shield, CheckCircle } from 'lucide-react';
 
 const DriverDetailModal = ({ show, onHide, driver, onEdit, onRemove }) => {
   if (!driver) return null;

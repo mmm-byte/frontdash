@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Settings, FileText, Users, Truck, CheckCircle, User, MapPin, DollarSign } from "lucide-react";
 import RequestsCards from "./RequestsCards";
 import WithdrawalRequests from "./WithdrawalRequests";
@@ -19,8 +18,6 @@ const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (character
 }[character]));
 
 const AdminDashboard = () => {
-  const navigate = useNavigate();
-
   // State for restaurant requests - load from API
   const [restaurantRequests, setRestaurantRequests] = useState([]);
 

@@ -15,7 +15,9 @@ const DriverModal = ({ onHireDriver }) => {
   const [errors, setErrors] = useState({});
   const [duplicateWarning, setDuplicateWarning] = useState("");
   const [licenseWarning, setLicenseWarning] = useState("");
-  const [checkingDuplicate, setCheckingDuplicate] = useState(false);
+  const firstName = formData.firstName;
+  const lastName = formData.lastName;
+  const license = formData.license;
 
   const handleClose = () => {
     setShow(false);
@@ -34,15 +36,12 @@ const DriverModal = ({ onHireDriver }) => {
   // Check for duplicate driver name when both first and last name are entered
   useEffect(() => {
     const checkDuplicate = async () => {
-      const { firstName, lastName } = formData;
-
       // Only check if both names are entered
       if (!firstName.trim() || !lastName.trim()) {
         setDuplicateWarning("");
         return;
       }
 
-      setCheckingDuplicate(true);
       try {
         const response = await api.drivers.getAll();
         if (response.success && response.drivers) {
@@ -61,21 +60,17 @@ const DriverModal = ({ onHireDriver }) => {
         }
       } catch (error) {
         console.error("Error checking duplicate:", error);
-      } finally {
-        setCheckingDuplicate(false);
       }
     };
 
     // Debounce the check by 500ms
     const timeoutId = setTimeout(checkDuplicate, 500);
     return () => clearTimeout(timeoutId);
-  }, [formData.firstName, formData.lastName]);
+  }, [firstName, lastName]);
 
   // Check for duplicate license number
   useEffect(() => {
     const checkLicense = async () => {
-      const { license } = formData;
-
       // Only check if license is entered
       if (!license.trim()) {
         setLicenseWarning("");
@@ -105,7 +100,7 @@ const DriverModal = ({ onHireDriver }) => {
     // Debounce the check by 500ms
     const timeoutId = setTimeout(checkLicense, 500);
     return () => clearTimeout(timeoutId);
-  }, [formData.license]);
+  }, [license]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import api from '../utils/api';
 
 const OrderHistory = ({ restaurantId }) => {
@@ -6,11 +6,7 @@ const OrderHistory = ({ restaurantId }) => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all'); // all, completed, cancelled
 
-  useEffect(() => {
-    loadOrders();
-  }, [restaurantId, filter]);
-
-  const loadOrders = async () => {
+  const loadOrders = useCallback(async () => {
     if (!restaurantId) return;
 
     try {
@@ -38,7 +34,11 @@ const OrderHistory = ({ restaurantId }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [restaurantId, filter]);
+
+  useEffect(() => {
+    loadOrders();
+  }, [loadOrders]);
 
   const getStatusBadge = (status) => {
     const statusConfig = {

@@ -23,7 +23,6 @@ const RestaurantDashboard = () => {
   const [preparingOrders, setPreparingOrders] = useState([]);
   const [preparingTimestamps, setPreparingTimestamps] = useState({}); // Track when orders start preparing
   const [deliveryModal, setDeliveryModal] = useState({ show: false, customer: "" });
-  const [search, setSearch] = useState("");
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
 
   // Load restaurant data and pending orders on mount
@@ -205,9 +204,6 @@ const RestaurantDashboard = () => {
 
   // Generic header; no restaurant profile branding
 
-  const filteredPending = pendingOrders.filter(o => o.customer.toLowerCase().includes(search.toLowerCase()));
-  const filteredPreparing = preparingOrders.filter(o => o.customer.toLowerCase().includes(search.toLowerCase()));
-
   return (
     <div style={{ minHeight: '100vh' }}>
       <div className="page-hero gradient-yellow">
@@ -267,8 +263,8 @@ const RestaurantDashboard = () => {
             {showOrders && (
               <div style={{ width: "350px" }}>
                 <OrdersSidebar
-                  pendingOrders={filteredPending}
-                  preparingOrders={filteredPreparing}
+                  pendingOrders={pendingOrders}
+                  preparingOrders={preparingOrders}
                   preparingTimestamps={preparingTimestamps}
                   onAcceptOrder={handleAcceptOrder}
                   onMarkReady={handleMarkReady}

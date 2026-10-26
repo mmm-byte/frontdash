@@ -10,6 +10,7 @@ const CustomerMenuPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const restaurant = location.state?.restaurant || { name: "Restaurant" };
+  const restaurantId = restaurant.restaurantID || restaurant.id;
   const [cart, setCart] = useState([]);
   const [deliveryAddress, setDeliveryAddress] = useState(null);
   const [showAddressModal, setShowAddressModal] = useState(false);
@@ -21,10 +22,8 @@ const CustomerMenuPage = () => {
   // Load menu items from database
   useEffect(() => {
     const loadMenuItems = async () => {
-      const restaurantId = restaurant.restaurantID || restaurant.id;
-
       if (!restaurantId) {
-        console.error('No restaurant ID provided', restaurant);
+        console.error('No restaurant ID provided');
         setLoading(false);
         return;
       }
@@ -57,7 +56,7 @@ const CustomerMenuPage = () => {
     };
 
     loadMenuItems();
-  }, [restaurant.id]);
+  }, [restaurantId]);
 
   const categories = ['All', ...new Set(foodItems.map(item => item.category))];
   const filteredFoodItems = selectedCategory === 'All' ? foodItems : foodItems.filter(item => item.category === selectedCategory);

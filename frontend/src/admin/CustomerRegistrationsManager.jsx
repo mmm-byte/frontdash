@@ -7,8 +7,6 @@ const CustomerRegistrationsManager = ({ onApproval }) => {
   const [selectedRegistration, setSelectedRegistration] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showApprovalModal, setShowApprovalModal] = useState(false);
-  const [generatedCustomerId, setGeneratedCustomerId] = useState("");
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     loadRegistrations();
@@ -16,7 +14,6 @@ const CustomerRegistrationsManager = ({ onApproval }) => {
 
   const loadRegistrations = async () => {
     try {
-      setLoading(true);
       // Get PENDING customers awaiting approval
       const response = await api.customers.getPending();
       if (response && response.success && response.data) {
@@ -46,14 +43,11 @@ const CustomerRegistrationsManager = ({ onApproval }) => {
     } catch (error) {
       console.error('Error loading customer registrations:', error);
       setRegistrations([]); // Set empty array on error
-    } finally {
-      setLoading(false);
     }
   };
 
   const handleApprove = async (registration) => {
     try {
-      setLoading(true);
       const response = await api.customers.updateStatus(registration.id, 'APPROVED');
 
       if (response.success) {
@@ -61,7 +55,6 @@ const CustomerRegistrationsManager = ({ onApproval }) => {
         setRegistrations(registrations.filter(r => r.id !== registration.id));
 
         // Show approval modal with customer ID
-        setGeneratedCustomerId(registration.id);
         setSelectedRegistration(registration);
         setShowApprovalModal(true);
         setShowDetailsModal(false);
@@ -71,8 +64,6 @@ const CustomerRegistrationsManager = ({ onApproval }) => {
     } catch (error) {
       console.error('Error approving registration:', error);
       alert('Failed to approve registration. Please try again.');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -82,7 +73,6 @@ const CustomerRegistrationsManager = ({ onApproval }) => {
     }
 
     try {
-      setLoading(true);
       const response = await api.customers.updateStatus(registration.id, 'REJECTED');
 
       if (response.success) {
@@ -93,8 +83,6 @@ const CustomerRegistrationsManager = ({ onApproval }) => {
     } catch (error) {
       console.error('Error rejecting registration:', error);
       alert('Failed to reject registration. Please try again.');
-    } finally {
-      setLoading(false);
     }
   };
 

@@ -9,7 +9,7 @@ const ToastNotification = ({ show, visible, message, setShow, type = "success" }
   // Auto-hide only when parent supplied a setter
   React.useEffect(() => {
     if (isShown && typeof setShow === 'function') {
-      const timer = setTimeout(() => safeSetShow(false), 4000);
+      const timer = setTimeout(() => setShow(false), 4000);
       return () => clearTimeout(timer);
     }
   }, [isShown, setShow]);
