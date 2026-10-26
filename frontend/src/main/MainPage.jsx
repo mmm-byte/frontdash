@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import RestaurantCard from "../user/RestaurantCard";
 import ToastNotification from "../shared/ToastNotification";
 import api from "../utils/api";
+import { getDemoRestaurants } from "../utils/demoData";
 import "../styles/mainpage.css";
 
 const categories = [
@@ -16,13 +17,13 @@ const MainPage = () => {
   const [search, setSearch] = useState("");
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState(false);
+  const [demoMode, setDemoMode] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [toast, setToast] = useState({ show: false, message: "", type: "warning" });
 
   const loadRestaurants = async () => {
     setLoading(true);
-    setLoadError(false);
+    setDemoMode(false);
     try {
       const response = await api.restaurants.getAll("APPROVED");
       if (response?.success && response.data) {
@@ -39,7 +40,8 @@ const MainPage = () => {
       }
     } catch (error) {
       console.error("Failed to load restaurants:", error);
-      setLoadError(true);
+      setRestaurants(getDemoRestaurants());
+      setDemoMode(true);
     } finally {
       setLoading(false);
     }
@@ -124,15 +126,10 @@ const MainPage = () => {
       <section className="frontdash-restaurants container" id="restaurants">
         <div className="frontdash-section-heading frontdash-restaurant-heading">
           <div><span className="frontdash-kicker">GOOD THINGS ARE COOKING</span><h2>{search ? `Results for “${search}”` : "Around the table"}</h2></div>
-          {!loading && !loadError && <span className="frontdash-result-count">{filteredRestaurants.length} {filteredRestaurants.length === 1 ? "place" : "places"}</span>}
+          {!loading && <div className="frontdash-results-meta">{demoMode && <span className="frontdash-demo-label">Preview mode · sample menu</span>}<span className="frontdash-result-count">{filteredRestaurants.length} {filteredRestaurants.length === 1 ? "place" : "places"}</span></div>}
         </div>
         {loading ? (
           <div className="frontdash-loading" role="status"><span className="frontdash-loader" /><span>Finding something delicious…</span></div>
-        ) : loadError ? (
-          <div className="frontdash-empty-state">
-            <span className="frontdash-empty-icon"><i className="bi bi-wifi-off" /></span><h3>We lost the menu for a moment.</h3>
-            <p>Give it another try in a few seconds.</p><button type="button" className="frontdash-retry" onClick={loadRestaurants}>Try again <i className="bi bi-arrow-repeat" /></button>
-          </div>
         ) : filteredRestaurants.length ? (
           <div className="row g-4 frontdash-restaurant-grid">
             {filteredRestaurants.map((restaurant) => <div className="col-lg-4 col-md-6" key={restaurant.id}><RestaurantCard restaurant={restaurant} onClosedClick={showClosedToast} /></div>)}

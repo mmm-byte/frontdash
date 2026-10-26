@@ -49,18 +49,12 @@ const TopNav = () => {
   };
 
   const handleLogoClick = () => {
-    // If user is logged in and not on home page, log them out
-    if (user && location.pathname !== '/') {
-      handleLogout();
-    } else {
-      // Just navigate to home
-      navigate('/');
-    }
+    navigate('/');
   };
 
   return (
     <nav
-      className="w-100"
+      className="frontdash-app-nav w-100"
       style={{
         position: 'sticky',
         top: 0,

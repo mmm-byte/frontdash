@@ -205,14 +205,14 @@ const RestaurantDashboard = () => {
   // Generic header; no restaurant profile branding
 
   return (
-    <div style={{ minHeight: '100vh' }}>
+      <div className="frontdash-workspace" style={{ minHeight: '100vh' }}>
       <div className="page-hero gradient-yellow">
         <div className="container text-center">
           <h1 className="mb-1 fw-bold">Restaurant Dashboard</h1>
           <p className="mb-0" style={{ opacity: 0.85 }}>Manage your restaurant efficiently</p>
         </div>
       </div>
-      <div className="d-flex">
+      <div className="frontdash-dashboard-layout d-flex">
         <Sidebar
           activeTab={activeTab}
           setActiveTab={setActiveTab}

@@ -18,15 +18,6 @@ const FoodItemCard = ({ item, onAdd }) => {
   return (
     <div
       className="card h-100 border-0 position-relative overflow-hidden interactive-card card-surface"
-      style={{ borderRadius: '16px' }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'translateY(-8px)';
-        e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.15)';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = 'translateY(0)';
-        e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.1)';
-      }}
     >
       {!item.available && (
         <div
@@ -63,24 +54,21 @@ const FoodItemCard = ({ item, onAdd }) => {
             padding: '6px 12px'
           }}
         >
-          <span className="fw-bold text-primary">${item.price}</span>
+          <span className="fw-bold text-primary">${Number(item.price).toFixed(2)}</span>
         </div>
       </div>
 
       <div className="card-body p-4 d-flex flex-column">
-        <h5 className="card-title fw-bold mb-2" style={{ color: '#2c3e50' }}>
+        <h5 className="card-title fw-bold mb-2">
           {item.name}
         </h5>
         <p className="card-text text-muted small mb-3 flex-grow-1" style={{ lineHeight: '1.5' }}>
           {item.description}
         </p>
 
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <div className="d-flex align-items-center">
-            <span className="text-warning me-1">★★★★★</span>
-            <small className="text-muted">(4.8)</small>
-          </div>
-          <div className="fw-semibold text-success">
+        <div className="d-flex justify-content-between align-items-center mb-3 food-card-meta">
+          <span className="food-item-category">{item.category || 'From the kitchen'}</span>
+          <div className={`fw-semibold ${item.available ? 'text-success' : 'text-muted'}`}>
             {item.available ? 'Available' : 'Unavailable'}
           </div>
         </div>

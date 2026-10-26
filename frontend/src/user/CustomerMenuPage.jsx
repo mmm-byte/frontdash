@@ -5,6 +5,7 @@ import CartSidebar from "../shared/CartSidebar";
 import AddressModal from "../shared/AddressModal";
 import ToastNotification from "../shared/ToastNotification";
 import api from "../utils/api";
+import { getDemoMenu } from "../utils/demoData";
 
 const CustomerMenuPage = () => {
   const navigate = useNavigate();
@@ -24,6 +25,12 @@ const CustomerMenuPage = () => {
     const loadMenuItems = async () => {
       if (!restaurantId) {
         console.error('No restaurant ID provided');
+        setLoading(false);
+        return;
+      }
+
+      if (restaurant.isDemo) {
+        setFoodItems(getDemoMenu(restaurantId));
         setLoading(false);
         return;
       }
@@ -56,7 +63,7 @@ const CustomerMenuPage = () => {
     };
 
     loadMenuItems();
-  }, [restaurantId]);
+  }, [restaurantId, restaurant.isDemo]);
 
   const categories = ['All', ...new Set(foodItems.map(item => item.category))];
   const filteredFoodItems = selectedCategory === 'All' ? foodItems : foodItems.filter(item => item.category === selectedCategory);

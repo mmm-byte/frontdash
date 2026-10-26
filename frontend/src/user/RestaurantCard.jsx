@@ -22,11 +22,12 @@ const RestaurantCard = ({ restaurant, onClosedClick }) => {
           loading="lazy"
           onError={(event) => { event.currentTarget.src = "/images/pizza.jpg"; }}
         />
-        <span className={`frontdash-open-badge${restaurant.open === false ? " is-closed" : ""}`}>
-          <span />{restaurant.open === false ? "Closed" : "Taking orders"}
+        <span className={`frontdash-open-badge${restaurant.open === false ? " is-closed" : ""}${restaurant.isDemo ? " is-preview" : ""}`}>
+          <span />{restaurant.isDemo ? "Preview" : restaurant.open === false ? "Closed" : "Taking orders"}
         </span>
       </button>
       <div className="frontdash-restaurant-info">
+        {restaurant.isDemo && <span className="frontdash-sample-tag">Sample menu</span>}
         <div className="frontdash-restaurant-name-row"><h3>{restaurant.name}</h3><span className="frontdash-restaurant-spark"><i className="bi bi-stars" /></span></div>
         <p><i className="bi bi-geo-alt" aria-hidden="true" />{restaurant.address}</p>
         <button className="frontdash-menu-link" type="button" onClick={openMenu}>Explore menu <i className="bi bi-arrow-up-right" /></button>

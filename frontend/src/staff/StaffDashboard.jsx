@@ -432,7 +432,7 @@ const StaffDashboard = () => {
   };
 
   return (
-    <div className="min-vh-100" style={{ background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #dbeafe 100%)' }}>
+    <div className="frontdash-workspace min-vh-100" style={{ background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #dbeafe 100%)' }}>
       {/* Toast Notification */}
       <ToastNotification
         show={showToast}

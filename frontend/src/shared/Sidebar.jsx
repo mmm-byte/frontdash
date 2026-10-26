@@ -48,6 +48,7 @@ const Sidebar = ({ activeTab, setActiveTab, handleLogout, restaurantName }) => {
 
   return (
     <div
+      className="frontdash-dashboard-sidebar"
       style={{
         width: "280px",
         background: "linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 252, 248, 0.95) 100%)",
