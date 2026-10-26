@@ -1,0 +1,36 @@
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-box {
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  width: 350px;
+  text-align: center;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+}
+
+.modal-box h5 {
+  margin-bottom: 15px;
+}
+
+.modal-box p {
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-around;
+}

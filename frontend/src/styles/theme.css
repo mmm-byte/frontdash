@@ -1,0 +1,155 @@
+/* Global Theme and UI Utilities */
+
+/* Color System */
+:root {
+  --color-bg: #f7f9fc;
+  --color-surface: #ffffff;
+  --color-surface-2: #f8fafc;
+  --color-border: #e6eaf0;
+  --color-text: #1f2937;
+  --color-muted: #6b7280;
+
+  --primary-500: #667eea; /* Indigo */
+  --primary-600: #5a6fd6;
+  --accent-500: #764ba2; /* Purple */
+  --brand-500: #f59e0b; /* Amber */
+  --brand-400: #fbbf24; /* Lighter Amber */
+  --success-500: #28a745;
+  --warning-500: #f59e0b;
+  --danger-500: #ef4444;
+
+  --radius-12: 12px;
+  --radius-16: 16px;
+  --radius-20: 20px;
+  --shadow-soft: 0 6px 20px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+html, body, #root { height: 100%; }
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography Scale */
+h1, .h1 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 1rem; font-size: clamp(2rem, 2vw + 1.6rem, 3rem); }
+h2, .h2 { font-weight: 700; letter-spacing: -0.01em; margin: 0 0 0.75rem; font-size: clamp(1.5rem, 1.5vw + 1.2rem, 2.25rem); }
+h3, .h3 { font-weight: 700; margin: 0 0 0.75rem; font-size: clamp(1.25rem, 1.2vw + 1rem, 1.75rem); }
+h4, .h4 { font-weight: 700; margin: 0 0 0.5rem; font-size: 1.25rem; }
+h5, .h5 { font-weight: 700; margin: 0 0 0.5rem; font-size: 1.1rem; }
+h6, .h6 { font-weight: 700; margin: 0 0 0.5rem; font-size: 1rem; }
+p { margin-bottom: 0.75rem; color: var(--color-muted); }
+
+/* Cards */
+.card-surface {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-16);
+  box-shadow: var(--shadow-soft);
+}
+
+.card-glass {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-20);
+  box-shadow: var(--shadow-lg);
+}
+
+.interactive-card {
+  transition: transform 220ms ease, box-shadow 220ms ease;
+}
+.interactive-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Buttons */
+.btn-gradient-primary {
+  background: linear-gradient(135deg, var(--primary-500) 0%, var(--accent-500) 100%);
+  border: none;
+  color: #fff !important;
+}
+.btn-gradient-primary:hover { filter: brightness(1.05); }
+
+.btn-gradient-success {
+  background: linear-gradient(45deg, var(--success-500), #20c997);
+  border: none;
+  color: #fff !important;
+}
+.btn-gradient-success:hover { filter: brightness(1.05); }
+
+.btn-gradient-dark {
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  border: none;
+  color: #fff !important;
+}
+.btn-gradient-dark:hover { filter: brightness(1.05); }
+
+/* Badges */
+.badge-open {
+  background: #16a34a; /* bright green */
+  color: #fff;
+}
+.badge-closed {
+  background: #dc2626; /* vivid red */
+  color: #fff;
+}
+
+/* Hero / Headers */
+.page-hero {
+  color: #fff;
+  padding: 3rem 0;
+  text-align: center;
+}
+.gradient-purple { background: linear-gradient(135deg, var(--primary-500) 0%, var(--accent-500) 100%); }
+.gradient-yellow { background: linear-gradient(135deg, var(--brand-500) 0%, var(--brand-400) 100%); }
+
+.btn-gradient-brand {
+  background: linear-gradient(135deg, var(--brand-500) 0%, var(--brand-400) 100%);
+  border: none;
+  color: #fff !important;
+}
+
+/* Inputs */
+.input-elevated {
+  border-radius: 30px !important;
+  border: 2px solid transparent !important;
+  background: #fff !important;
+  box-shadow: var(--shadow-soft);
+  padding: 14px 18px !important;
+}
+.input-elevated:focus {
+  border-color: var(--primary-500) !important;
+  box-shadow: 0 10px 28px rgba(102, 126, 234, 0.25) !important;
+}
+
+/* Background helpers */
+.page-bg {
+  position: fixed;
+  inset: 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: -2;
+}
+.page-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(102,126,234,0.1) 0%, rgba(118,75,162,0.1) 100%);
+  z-index: -1;
+}
+
+/* Sections */
+.section {
+  padding: 2rem 0;
+}
+
+/* Utility spacing */
+.gap-6 { gap: 1.5rem; }
+.rounded-16 { border-radius: var(--radius-16) !important; }
+.rounded-20 { border-radius: var(--radius-20) !important; }
+.shadow-soft { box-shadow: var(--shadow-soft) !important; }
+.shadow-lg-2 { box-shadow: var(--shadow-lg) !important; }

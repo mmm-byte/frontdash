@@ -1,0 +1,42 @@
+.payment-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.payment-modal-content {
+  background: white; /* White background so green tick is visible */
+  padding: 40px;
+  border-radius: 12px;
+  text-align: center;
+  min-width: 300px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.spinner-container .spinner {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #007bff;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 20px auto;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.success-container .green-tick {
+  font-size: 60px;
+  color: green;
+  margin-bottom: 15px;
+}

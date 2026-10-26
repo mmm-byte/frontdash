@@ -1,0 +1,28 @@
+.cart-sidebar {
+  position: fixed;
+  top: 80px; /* moved down from top */
+  right: 0;
+  width: 300px;
+  height: calc(100% - 100px); /* adjust height to fit below top */
+  background-color: #fff;
+  box-shadow: -4px 0 12px rgba(0,0,0,0.2);
+  padding: 20px;
+  transform: translateX(0);
+  transition: transform 0.3s ease;
+  z-index: 1000; /* lower than toast */
+  border-radius: 8px 0 0 8px;
+}
+
+.cart-sidebar h5 {
+  margin-bottom: 15px;
+}
+
+.list-group-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cart-sidebar button {
+  margin-left: 10px;
+}
