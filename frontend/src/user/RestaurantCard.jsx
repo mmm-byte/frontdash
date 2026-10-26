@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { ArrowUpRight, MapPin } from "lucide-react";
 import "../styles/restaurantCard.css";
 
 const RestaurantCard = ({ restaurant, onClosedClick }) => {
@@ -22,15 +23,14 @@ const RestaurantCard = ({ restaurant, onClosedClick }) => {
           loading="lazy"
           onError={(event) => { event.currentTarget.src = "/images/pizza.jpg"; }}
         />
-        <span className={`frontdash-open-badge${restaurant.open === false ? " is-closed" : ""}${restaurant.isDemo ? " is-preview" : ""}`}>
-          <span />{restaurant.isDemo ? "Preview" : restaurant.open === false ? "Closed" : "Taking orders"}
-        </span>
+        {restaurant.isDemo && <span className="frontdash-open-badge is-preview">Sample listing</span>}
+        {restaurant.open === false && <span className="frontdash-open-badge is-closed">Closed</span>}
       </button>
       <div className="frontdash-restaurant-info">
-        {restaurant.isDemo && <span className="frontdash-sample-tag">Sample menu</span>}
-        <div className="frontdash-restaurant-name-row"><h3>{restaurant.name}</h3><span className="frontdash-restaurant-spark"><i className="bi bi-stars" /></span></div>
-        <p><i className="bi bi-geo-alt" aria-hidden="true" />{restaurant.address}</p>
-        <button className="frontdash-menu-link" type="button" onClick={openMenu}>Explore menu <i className="bi bi-arrow-up-right" /></button>
+        <div className="frontdash-restaurant-name-row"><h3>{restaurant.name}</h3></div>
+        {(restaurant.cuisine || restaurant.tags?.length > 0) && <div className="frontdash-restaurant-cuisine">{restaurant.cuisine || restaurant.tags.join(" · ")}</div>}
+        {restaurant.address && <p><MapPin size={13} aria-hidden="true" />{restaurant.address}</p>}
+        <button className="frontdash-menu-link" type="button" onClick={openMenu}>View menu <ArrowUpRight size={15} /></button>
       </div>
     </article>
   );

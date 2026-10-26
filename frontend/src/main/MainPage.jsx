@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { ArrowUpRight, CookingPot, Fish, MapPin, Pizza, Search, Sandwich, X } from "lucide-react";
 import RestaurantCard from "../user/RestaurantCard";
 import ToastNotification from "../shared/ToastNotification";
 import api from "../utils/api";
@@ -7,10 +8,10 @@ import { getDemoRestaurants } from "../utils/demoData";
 import "../styles/mainpage.css";
 
 const categories = [
-  { label: "Pizza", image: "/images/pizza.jpg", icon: "bi-pie-chart-fill" },
-  { label: "Burgers", image: "/images/burger.jpg", icon: "bi-fire" },
-  { label: "Sushi", image: "/images/sushi.jpg", icon: "bi-egg-fried" },
-  { label: "Tacos", image: "/images/taco.jpg", icon: "bi-stars" },
+  { label: "Pizza", icon: Pizza },
+  { label: "Burgers", icon: Sandwich },
+  { label: "Sushi", icon: Fish },
+  { label: "Tacos", icon: CookingPot },
 ];
 
 const MainPage = () => {
@@ -30,10 +31,9 @@ const MainPage = () => {
         setRestaurants(response.data.map((restaurant) => ({
           id: restaurant.restaurantID,
           name: restaurant.name,
-          address: `${restaurant.street}, ${restaurant.city}, ${restaurant.state} ${restaurant.zip}`,
+          address: [restaurant.street, restaurant.city, restaurant.state, restaurant.zip].filter(Boolean).join(", "),
           image: restaurant.pictureUrl || "/images/restaurant-default.jpg",
-          open: true,
-          tags: restaurant.tags || [],
+          tags: Array.isArray(restaurant.tags) ? restaurant.tags : [],
         })));
       } else {
         setRestaurants([]);
@@ -52,12 +52,23 @@ const MainPage = () => {
   }, []);
 
   const filteredRestaurants = useMemo(() => restaurants.filter((restaurant) => {
-    const matchesSearch = restaurant.name.toLowerCase().includes(search.trim().toLowerCase());
+    const query = search.trim().toLowerCase();
+    const searchableText = [
+      restaurant.name,
+      restaurant.address,
+      ...(restaurant.tags || []),
+      ...(restaurant.menu || []).map((item) => `${item.name} ${item.category}`),
+    ].join(" ").toLowerCase();
+    const matchesSearch = !query || searchableText.includes(query);
     const matchesCategory = !selectedCategory
-      || restaurant.tags.length === 0
-      || restaurant.tags.some((tag) => tag.toLowerCase().includes(selectedCategory.toLowerCase()));
+      || (restaurant.tags || []).some((tag) => tag.toLowerCase().includes(selectedCategory.toLowerCase()));
     return matchesSearch && matchesCategory;
   }), [restaurants, search, selectedCategory]);
+
+  const submitSearch = (event) => {
+    event.preventDefault();
+    document.getElementById("restaurants")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   const showClosedToast = (restaurant) => {
     setToast({ show: true, message: `${restaurant.name} is currently closed. Try again later.`, type: "warning" });
@@ -65,90 +76,105 @@ const MainPage = () => {
 
   return (
     <main className="frontdash-page">
-      <section className="frontdash-hero">
-        <div className="frontdash-hero-glow frontdash-hero-glow-one" />
-        <div className="frontdash-hero-glow frontdash-hero-glow-two" />
-        <div className="container frontdash-hero-grid">
-          <div className="frontdash-hero-copy">
-            <span className="frontdash-eyebrow"><span /> GOOD FOOD, RIGHT AROUND YOU</span>
-            <h1><span>Make tonight</span><span>a little <em>tastier.</em></span></h1>
-            <p>Find a new favorite, build your order, and let the good part of your day come to you.</p>
-            <form className="frontdash-search" onSubmit={(event) => event.preventDefault()} role="search">
-              <i className="bi bi-search" aria-hidden="true" />
-              <input
-                aria-label="Search restaurants"
-                placeholder="What are you craving?"
-                value={search}
-                onChange={(event) => setSearch(event.target.value)}
-              />
-              {search && <button type="button" onClick={() => setSearch("")} aria-label="Clear search"><i className="bi bi-x-lg" /></button>}
-              <a href="#restaurants" className="frontdash-search-submit" aria-label="Find restaurants"><i className="bi bi-arrow-right" /></a>
-            </form>
-            <div className="frontdash-hero-meta">
-              <span><i className="bi bi-clock" /> A few taps to happy</span>
-              <span><i className="bi bi-heart" /> Made for your cravings</span>
-            </div>
-          </div>
-          <div className="frontdash-hero-art" aria-label="A selection of freshly prepared dishes" role="img">
-            <div className="frontdash-food-orbit orbit-one" />
-            <div className="frontdash-food-orbit orbit-two" />
-            <div className="frontdash-food-photo frontdash-food-photo-main"><img src="/images/burger.jpg" alt="Freshly made burger" /></div>
-            <div className="frontdash-food-photo frontdash-food-photo-small"><img src="/images/taco.jpg" alt="Colorful tacos" /></div>
-            <div className="frontdash-food-note"><span className="frontdash-note-icon"><i className="bi bi-stars" /></span><span><strong>Your next favorite</strong><small>is closer than you think</small></span></div>
-            <span className="frontdash-art-spark spark-one">✧</span><span className="frontdash-art-spark spark-two">✦</span>
-          </div>
+      <section className="frontdash-storefront container">
+        <div className="frontdash-delivery-location">
+          <MapPin size={15} aria-hidden="true" />
+          <span>Delivering near</span>
+          <strong>Dallas, TX</strong>
         </div>
-        <a className="frontdash-scroll-cue" href="#discover"><span /> SCROLL TO DISCOVER</a>
+
+        <div className="frontdash-storefront-heading">
+          <div>
+            <span className="frontdash-kicker">LOCAL RESTAURANTS · EASY ORDERING</span>
+            <h1>Find something good to eat.</h1>
+            <p>Browse nearby menus, choose your meal, and build an order.</p>
+          </div>
+          <form className="frontdash-search" onSubmit={submitSearch} role="search">
+            <Search size={19} aria-hidden="true" />
+            <input
+              aria-label="Search restaurants, dishes, or cuisines"
+              placeholder="Restaurant, dish, or cuisine"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+            />
+            {search && <button type="button" onClick={() => setSearch("")} aria-label="Clear search"><X size={16} /></button>}
+            <button className="frontdash-search-submit" type="submit">Search</button>
+          </form>
+        </div>
       </section>
 
-      <section className="frontdash-discover container" id="discover">
-        <div className="frontdash-section-heading">
-          <div><span className="frontdash-kicker">THE SHORTLIST</span><h2>What sounds good?</h2></div>
-          <p>Pick a craving. We’ll find the rest.</p>
+      <section className="frontdash-discover container" aria-label="Restaurant categories">
+        <div className="frontdash-category-heading">
+          <h2>Browse by cuisine</h2>
+          {selectedCategory && <button type="button" className="frontdash-clear-filter" onClick={() => setSelectedCategory("")}>Clear filter <X size={14} /></button>}
         </div>
-        <div className="frontdash-categories" aria-label="Filter by food category">
-          {categories.map((category) => (
+        <div className="frontdash-categories">
+          {categories.map(({ label, icon: Icon }) => (
             <button
-              key={category.label}
+              key={label}
               type="button"
-              className={`frontdash-category${selectedCategory === category.label ? " is-active" : ""}`}
-              onClick={() => setSelectedCategory((current) => current === category.label ? "" : category.label)}
-              aria-pressed={selectedCategory === category.label}
+              className={`frontdash-category${selectedCategory === label ? " is-active" : ""}`}
+              onClick={() => setSelectedCategory((current) => current === label ? "" : label)}
+              aria-pressed={selectedCategory === label}
             >
-              <span className="frontdash-category-image"><img src={category.image} alt="" /><i className={`bi ${category.icon}`} /></span>
-              <span>{category.label}</span><i className="bi bi-arrow-up-right frontdash-category-arrow" />
+              <Icon size={17} aria-hidden="true" />
+              <span>{label}</span>
             </button>
           ))}
-          {selectedCategory && <button type="button" className="frontdash-clear-filter" onClick={() => setSelectedCategory("")}>Clear filter <i className="bi bi-x" /></button>}
         </div>
       </section>
 
       <section className="frontdash-restaurants container" id="restaurants">
         <div className="frontdash-section-heading frontdash-restaurant-heading">
-          <div><span className="frontdash-kicker">GOOD THINGS ARE COOKING</span><h2>{search ? `Results for “${search}”` : "Around the table"}</h2></div>
-          {!loading && <div className="frontdash-results-meta">{demoMode && <span className="frontdash-demo-label">Preview mode · sample menu</span>}<span className="frontdash-result-count">{filteredRestaurants.length} {filteredRestaurants.length === 1 ? "place" : "places"}</span></div>}
+          <div>
+            <span className="frontdash-kicker">DALLAS, TEXAS</span>
+            <h2>{search ? `Results for “${search}”` : selectedCategory ? `${selectedCategory} near you` : "Restaurants near you"}</h2>
+          </div>
+          {!loading && <span className="frontdash-result-count">{filteredRestaurants.length} {filteredRestaurants.length === 1 ? "restaurant" : "restaurants"}</span>}
         </div>
+
+        {demoMode && !loading && (
+          <div className="frontdash-preview-notice">
+            <span>Preview data</span>
+            Restaurant listings and menus are sample content. Connect the API for live data and ordering.
+          </div>
+        )}
+
         {loading ? (
-          <div className="frontdash-loading" role="status"><span className="frontdash-loader" /><span>Finding something delicious…</span></div>
+          <div className="frontdash-loading" role="status"><span className="frontdash-loader" /><span>Loading nearby restaurants…</span></div>
         ) : filteredRestaurants.length ? (
           <div className="row g-4 frontdash-restaurant-grid">
-            {filteredRestaurants.map((restaurant) => <div className="col-lg-4 col-md-6" key={restaurant.id}><RestaurantCard restaurant={restaurant} onClosedClick={showClosedToast} /></div>)}
+            {filteredRestaurants.map((restaurant) => (
+              <div className="col-lg-4 col-md-6" key={restaurant.id}>
+                <RestaurantCard restaurant={restaurant} onClosedClick={showClosedToast} />
+              </div>
+            ))}
           </div>
         ) : (
           <div className="frontdash-empty-state">
-            <span className="frontdash-empty-icon"><i className="bi bi-emoji-smile" /></span>
-            <h3>{restaurants.length ? "Nothing on the menu for that search." : "The table is waiting for you."}</h3>
-            <p>{restaurants.length ? "Try another craving or clear your filters." : "Restaurants can join the neighborhood and start serving."}</p>
-            {restaurants.length ? <button type="button" className="frontdash-retry" onClick={() => { setSearch(""); setSelectedCategory(""); }}>Clear search <i className="bi bi-arrow-right" /></button> : <Link className="frontdash-retry" to="/restaurant-registration">List your restaurant <i className="bi bi-arrow-up-right" /></Link>}
+            <span className="frontdash-empty-icon"><Search size={20} /></span>
+            <h3>{restaurants.length ? "No matching restaurants" : "No restaurants listed yet"}</h3>
+            <p>{restaurants.length ? "Try another restaurant, dish, or cuisine." : "Restaurant listings will appear here when they are available."}</p>
+            {restaurants.length > 0 && <button type="button" className="frontdash-retry" onClick={() => { setSearch(""); setSelectedCategory(""); }}>Clear filters</button>}
+            {restaurants.length === 0 && <button type="button" className="frontdash-retry" onClick={loadRestaurants}>Reload listings</button>}
           </div>
         )}
       </section>
 
       <section className="frontdash-partner-band">
-        <div className="container frontdash-partner-inner"><span className="frontdash-partner-mark"><i className="bi bi-shop" /></span><div><span className="frontdash-kicker">GOOD FOOD STARTS WITH GOOD PEOPLE</span><h2>Have a restaurant?</h2><p>Bring your menu to the neighborhood.</p></div><Link to="/restaurant-registration" className="frontdash-partner-link">Join FrontDash <i className="bi bi-arrow-up-right" /></Link></div>
+        <div className="container frontdash-partner-inner">
+          <div><span className="frontdash-kicker">FOR RESTAURANTS</span><h2>Bring your menu online.</h2><p>Manage dishes, operating hours, and incoming orders.</p></div>
+          <Link to="/restaurant-registration" className="frontdash-partner-link">Register your restaurant <ArrowUpRight size={16} /></Link>
+        </div>
       </section>
 
-      <footer className="frontdash-footer"><div className="container"><Link to="/" className="frontdash-footer-brand"><span className="frontdash-brand-icon">F</span>FrontDash</Link><span>Good food. Good days. © {new Date().getFullYear()} FrontDash</span><Link to="/customer-registration">Join the table <i className="bi bi-arrow-up-right" /></Link></div></footer>
+      <footer className="frontdash-footer">
+        <div className="container">
+          <Link to="/" className="frontdash-footer-brand"><span className="frontdash-brand-icon">F</span>FrontDash</Link>
+          <span>Restaurant ordering platform · Portfolio demo · © {new Date().getFullYear()}</span>
+          <Link to="/customer-registration">Create an account <ArrowUpRight size={13} /></Link>
+        </div>
+      </footer>
       <ToastNotification show={toast.show} message={toast.message} type={toast.type} setShow={(show) => setToast((current) => ({ ...current, show }))} />
     </main>
   );

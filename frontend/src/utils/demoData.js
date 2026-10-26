@@ -2,6 +2,7 @@ const demoRestaurants = [
   {
     id: "demo-saffron-house",
     name: "Saffron House",
+    cuisine: "Italian · Pizza",
     address: "118 Oak Ave, Dallas, TX 75201",
     image: "/images/pizza.jpg",
     open: true,
@@ -16,6 +17,7 @@ const demoRestaurants = [
   {
     id: "demo-lotus-kitchen",
     name: "Lotus Kitchen",
+    cuisine: "Japanese · Sushi",
     address: "24 Main St, Dallas, TX 75202",
     image: "/images/sushi.jpg",
     open: true,
@@ -30,6 +32,7 @@ const demoRestaurants = [
   {
     id: "demo-casa-verde",
     name: "Casa Verde",
+    cuisine: "Mexican · Tacos",
     address: "56 Cedar Lane, Dallas, TX 75204",
     image: "/images/taco.jpg",
     open: true,
