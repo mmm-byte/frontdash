@@ -574,7 +574,7 @@ const PaymentForm = ({
             }}
           >
             <i className="bi bi-shield-lock me-2"></i>
-            Complete Secure Payment
+            Place order
           </button>
 
           {/* Validation feedback when form is invalid */}

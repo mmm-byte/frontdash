@@ -1,10 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "../styles/PaymentConfirmationModal.css"; // optional for custom styles
 
 const PaymentConfirmationModal = ({ show, onComplete, orderNumber, orderPlacedAt, discount = 0, pointsEarned = 0, customerData = null }) => {
-  const [loading, setLoading] = useState(true);
-  const [success, setSuccess] = useState(false);
-
   // Format date and time
   const formatDateTime = (date) => {
     if (!date) return '';
@@ -19,33 +16,10 @@ const PaymentConfirmationModal = ({ show, onComplete, orderNumber, orderPlacedAt
     return new Date(date).toLocaleString('en-US', options);
   };
 
-  // Calculate estimated delivery time (30-40 minutes from order placement)
-  const getEstimatedDelivery = (placedAt) => {
-    if (!placedAt) return '30-40 mins';
-    const estimatedMinutes = 30 + Math.floor(Math.random() * 11); // Random between 30-40 minutes
-    const deliveryTime = new Date(new Date(placedAt).getTime() + estimatedMinutes * 60000);
-    return deliveryTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-  };
-
   useEffect(() => {
-    if (show) {
-      setLoading(true);
-      setSuccess(false);
-
-      const timer1 = setTimeout(() => {
-        setLoading(false);
-        setSuccess(true);
-      }, 3000); // 3 seconds loading
-
-      const timer2 = setTimeout(() => {
-        onComplete();
-      }, 7000); // total 7 seconds before redirect
-
-      return () => {
-        clearTimeout(timer1);
-        clearTimeout(timer2);
-      };
-    }
+    if (!show) return undefined;
+    const timer = setTimeout(onComplete, 7000);
+    return () => clearTimeout(timer);
   }, [show, onComplete]);
 
   if (!show) return null;
@@ -53,16 +27,9 @@ const PaymentConfirmationModal = ({ show, onComplete, orderNumber, orderPlacedAt
   return (
     <div className="payment-modal-backdrop">
       <div className="payment-modal-content">
-        {loading && (
-          <div className="spinner-container">
-            <div className="spinner"></div>
-            <p>Processing Payment...</p>
-          </div>
-        )}
-        {success && (
           <div className="success-container">
             <div className="green-tick">✔</div>
-            <p>Order Placed!</p>
+            <p>Order confirmed</p>
             {orderNumber && (
               <p style={{ fontWeight: 700, marginBottom: '8px' }}>Order #: {orderNumber}</p>
             )}
@@ -73,7 +40,7 @@ const PaymentConfirmationModal = ({ show, onComplete, orderNumber, orderPlacedAt
                   {formatDateTime(orderPlacedAt)}
                 </p>
                 <p style={{ fontSize: '0.95rem', marginBottom: '15px' }}>
-                  <strong>Estimated Delivery:</strong> {getEstimatedDelivery(orderPlacedAt)}
+                  <strong>Estimated delivery:</strong> 30–40 minutes (demo estimate)
                 </p>
               </>
             )}
@@ -106,7 +73,6 @@ const PaymentConfirmationModal = ({ show, onComplete, orderNumber, orderPlacedAt
               </div>
             )}
           </div>
-        )}
       </div>
     </div>
   );

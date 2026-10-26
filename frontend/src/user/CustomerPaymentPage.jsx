@@ -94,9 +94,6 @@ const CustomerPaymentPage = () => {
   const handlePaymentSubmit = async (data) => {
     setOrderError('');
     const on = Math.floor(100000 + Math.random() * 900000);
-    setOrderNumber(on);
-    const placedAt = new Date();
-    setOrderPlacedAt(placedAt);
 
     // Determine customer ID from either logged-in customer or payment form input
     const actualCustomerId = data.customerId || customerData?.customerId || null;
@@ -140,7 +137,9 @@ const CustomerPaymentPage = () => {
     // Note: pointsToRedeem removed - backend calculates discount automatically based on customer's loyalty points
 
     try {
-      await api.orders.create(orderData);
+      const createdOrder = await api.orders.create(orderData);
+      setOrderNumber(createdOrder.data?.orderID || createdOrder.data?.id || on);
+      setOrderPlacedAt(new Date());
 
       // Note: Points are automatically awarded by the backend in the order creation endpoint
       // No need to call api.points.earn separately
@@ -176,7 +175,7 @@ const CustomerPaymentPage = () => {
 
                 {/* Header Title */}
                 <h1 className="display-6 fw-bold mb-3 text-shadow">
-                  Secure Payment
+                  Checkout
                 </h1>
 
                 {/* Progress Breadcrumb */}
@@ -201,6 +200,7 @@ const CustomerPaymentPage = () => {
 
       {/* Main Content */}
       <div className="container pb-5">
+        <div className="alert alert-info" role="note">Portfolio demo: no payment processor is connected. Use dummy card details only; never enter real payment information.</div>
         {orderError && <div className="alert alert-danger" role="alert">{orderError}</div>}
         <div className="row g-4 justify-content-center">
           {/* Order Summary */}
